@@ -1,0 +1,23 @@
+{
+    "output_file": "ops_metrics/samples_data.csv",
+    "vault_secret_with_db_credentials": "mysql",
+    "query": "
+        SELECT
+            s.received AS sample_received,
+            s.id AS sample_id,
+            k.kit_type AS product
+        FROM ubiome.samples AS s
+        INNER JOIN ubiome.kits AS k ON k.barcode = s.kit_barcode
+        WHERE k.barcode NOT LIKE 'study-%' AND s.received > '2017-12-31'
+        ORDER BY s.received ASC",
+    "update_query_template": "
+        SELECT
+            s.received AS sample_received,
+            s.id AS sample_id,
+            k.kit_type AS product
+        FROM ubiome.samples AS s
+        INNER JOIN ubiome.kits AS k ON k.barcode = s.kit_barcode
+        WHERE k.barcode NOT LIKE 'study-%' AND s.received > '{}'
+        ORDER BY s.received ASC",
+    "update_query_param_source": "sample_received"
+}

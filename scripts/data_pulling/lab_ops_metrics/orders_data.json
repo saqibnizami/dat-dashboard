@@ -1,0 +1,19 @@
+{
+    "output_file": "lab_ops_metrics/orders_data.csv",
+    "vault_secret_with_db_credentials": "pg",
+    "query": "
+        SELECT
+            orders.id AS order_id,
+            order_flow,
+            created_at AS order_created_at,
+            order_type.code,
+            owner_id,
+            state,
+            prescription_id,
+            sample_id,
+            delivery_id
+        FROM orders.orders
+        INNER JOIN orders.order_type
+        ON orders.order_type_id=order_type.id
+        WHERE state NOT IN ('DRAFT') AND created_at > '2017-12-31'"
+}

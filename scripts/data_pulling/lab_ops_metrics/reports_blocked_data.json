@@ -1,0 +1,25 @@
+{
+    "output_file": "lab_ops_metrics/reports_blocked_data.csv",
+    "vault_secret_with_db_credentials": "mysql",
+    "query": "
+        SELECT
+            s.received AS sample_received,
+            s.id AS sample_id,
+            s.vial_barcode,
+            k.kit_type,
+            k.registered,
+            csss.status AS sample_process_status,
+            lsl.tubeId,
+            spd.ssr,
+            cri.id AS issue_id,
+            cri.name AS issue_name
+        FROM ubiome.samples AS s
+        INNER JOIN ubiome.kits AS k ON k.barcode = s.kit_barcode
+        INNER JOIN ubiome.clinical_samples_sequencing_status AS csss ON csss.sample = s.id
+        INNER JOIN ubiome.lab_sample_loading_view AS lsl ON s.vial_barcode = lsl.tubeId
+        INNER JOIN ubiome.ssr_pipelines_details AS spd ON spd.ssr = lsl.id
+        INNER JOIN ubiome.clinical_report_issues_sample_loading AS crisl ON crisl.ssr = spd.ssr AND crisl.version = spd.version
+        INNER JOIN ubiome.clinical_report_issues as cri ON cri.id = crisl.issue_id
+        WHERE k.barcode NOT LIKE 'study-%' AND s.received > '2017-12-31' AND spd.report_status = 'pending'
+        ORDER BY s.received ASC"
+}

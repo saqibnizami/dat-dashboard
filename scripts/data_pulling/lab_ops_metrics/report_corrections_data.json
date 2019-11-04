@@ -1,0 +1,24 @@
+{
+    "output_file": "lab_ops_metrics/report_corrections_data.csv",
+    "vault_secret_with_db_credentials": "pg",
+    "query": "
+        SELECT
+            id AS result_id,
+            order_id,
+            status AS result_status,
+            created_at AS result_created_at
+        FROM orders.order_results
+        WHERE created_at > '2017-12-31'
+        ORDER BY created_at ASC",
+    "update_query_template": "
+        SELECT
+            id AS result_id,
+            order_id,
+            status AS result_status,
+            created_at AS result_created_at
+        FROM orders.order_results
+        WHERE created_at > '{}'
+        ORDER BY created_at ASC",
+    "update_query_param_source": "result_created_at"
+}
+

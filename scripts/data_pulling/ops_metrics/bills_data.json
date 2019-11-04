@@ -1,0 +1,25 @@
+{
+    "output_file": "ops_metrics/bills_data.csv",
+    "vault_secret_with_db_credentials": "phi",
+    "query": "
+        SELECT
+            id AS bill_id,
+            order_id,
+            billing_date,
+            product,
+            resubmitted
+        FROM billing_views.claims
+        WHERE billing_date > '2017-12-31'
+        ORDER BY billing_date ASC",
+    "update_query_template": "
+        SELECT
+            id AS bill_id,
+            order_id,
+            billing_date,
+            product,
+            resubmitted
+        FROM billing_views.claims
+        WHERE billing_date > '{}'
+        ORDER BY billing_date ASC",
+    "update_query_param_source": "billing_date"
+}

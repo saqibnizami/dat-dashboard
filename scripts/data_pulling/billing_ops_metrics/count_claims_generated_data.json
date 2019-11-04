@@ -1,0 +1,15 @@
+{
+    "output_file": "billing_ops_metrics/count_claims_generated_data.csv",
+    "vault_secret_with_db_credentials": "phi",
+    "query": "
+        SELECT COUNT( DISTINCT id) as count_claims_generated
+        FROM (
+            SELECT id,
+            creation_date AT TIME ZONE 'America/Los_Angeles' AS creation_date,
+            product,
+            resubmitted
+            FROM billing_views.claims
+            WHERE creation_date between date {start_date} and date {end_date}
+            AND product in ({clinical_products})
+            ) AS count_claims_generated"
+}

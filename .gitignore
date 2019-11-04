@@ -1,0 +1,13 @@
+*.DS_Store
+*.pyc
+*.csv
+*.feather
+app/data/current/*
+.vscode/settings.json
+data/.DS_Store
+*.idea
+*.log
+.venv
+.python-version
+scripts/data_pulling/*/*.csv
+cache-directory

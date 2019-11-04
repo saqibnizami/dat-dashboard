@@ -1,0 +1,15 @@
+
+server {
+  listen 443 ssl;
+  server_name growth-app1-staging.east;
+
+  ssl on;
+  ssl_certificate  /etc/nginx/.ssl_certificate/ubiomeWildcard-combined.crt;
+  ssl_certificate_key  /etc/nginx/.ssl_certificate/ubiomeWildcard.key;
+
+    include location.conf/*;
+
+    location /robots.txt {
+      return 200 "User-agent: *\nDisallow: /";
+    }
+}

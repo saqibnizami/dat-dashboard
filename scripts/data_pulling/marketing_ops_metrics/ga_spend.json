@@ -1,0 +1,7 @@
+{
+    "output_file": "marketing_ops_metrics/ga_spend.csv",
+    "vault_secret_with_db_credentials": "analytics",
+    "query": "
+        SELECT campaign_name, day, spend
+        FROM campaigns.ga_daily_spend"
+}

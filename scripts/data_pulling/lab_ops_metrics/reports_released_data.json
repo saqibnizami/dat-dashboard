@@ -1,0 +1,29 @@
+{
+    "output_file": "lab_ops_metrics/reports_released_data.csv",
+    "vault_secret_with_db_credentials": "pg",
+    "query": "
+        SELECT
+            o.id AS order_id,
+            o.state,
+            o.sample_id,
+            o.order_type_id,
+            flow.status AS report_status,
+            flow.created_at AS report_created_at
+        FROM orders.orders_view AS o
+        INNER JOIN orders.order_status_view AS flow ON flow.order_id = o.id
+        WHERE flow.created_at > '2017-12-31'
+        ORDER BY flow.created_at ASC",
+    "update_query_template": "
+        SELECT
+            o.id AS order_id,
+            o.state,
+            o.sample_id,
+            o.order_type_id,
+            flow.status AS report_status,
+            flow.created_at AS report_created_at
+        FROM orders.orders_view AS o
+        INNER JOIN orders.order_status_view AS flow ON flow.order_id = o.id
+        WHERE flow.created_at > '{}'
+        ORDER BY flow.created_at ASC",
+    "update_query_param_source": "report_created_at"
+}

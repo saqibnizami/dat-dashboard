@@ -1,0 +1,7 @@
+{
+    "output_file": "marketing_ops_metrics/fb_spend.csv",
+    "vault_secret_with_db_credentials": "analytics",
+    "query": "
+        SELECT campaign_name, date_start, spend
+        FROM campaigns.fb_daily_spend"
+}

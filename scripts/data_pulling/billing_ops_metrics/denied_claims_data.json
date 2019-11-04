@@ -1,0 +1,22 @@
+{
+    "output_file": "billing_ops_metrics/denied_claims_data.csv",
+    "vault_secret_with_db_credentials": "phi",
+    "query": "
+        SELECT COUNT (DISTINCT ids) as count_denied
+        FROM
+        (
+        select zc_id as ids, se.*,c.product,zc.claim_id, ze.raw_message, date, row_number() over (partition by zc.claim_id ORDER BY date DESC) as date_seq
+        from billing.zirmed_claims zc
+        inner join billing.zirmed_history zh on zh.zirmed_claim_id = zc.id
+        inner join billing.zirmed_events_history ze on ze.zirmed_history_id = zh.id
+        left join collections.simplified_eobs se on se.zc_id = zc.id
+        inner join billing_views.dc_zirmed_claims dc on dc.zirmed_claims_id = zc.id
+        inner join billing_views.claims c on c.order_id = dc.order_id and date(c.billing_date) > date('2010-01-01')
+
+        WHERE ze.raw_message is not null AND ze.raw_message <> ''
+        AND raw_message = 'CLAIM DENIED BY PAYER'
+        AND issue_date between date {start_date} and date {end_date}
+        AND c.product in ({clinical_products})
+        ORDER BY zc.claim_id, date DESC) d
+        WHERE date_seq = 1"
+}
